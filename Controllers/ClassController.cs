@@ -18,10 +18,20 @@ namespace WebApi.Controllers
         public List<Class> GetClasses()
         {
             List<Class> allClasses = new List<Class>();
-            
-            Class workoutClass = new Class {
+
+            Class defaultClass = new Class
+            {
                 ID = Guid.NewGuid().ToString(),
-                TimeOfClass = "17:00pm - 17:50pm",
+                TimeOfClass = new List<string> { " " },
+                Name = "Default",
+                SpacesBooked = 0,
+                TotalSpaces = 0,
+            };
+
+            Class workoutClass = new Class
+            {
+                ID = Guid.NewGuid().ToString(),
+                TimeOfClass = new List<string> { "6:00am - 6:50am", "7:00am - 7:50am", "8:10pm - 9:00pm" },
                 Name = "Workout Class",
                 SpacesBooked = 0,
                 TotalSpaces = 10,
@@ -30,7 +40,7 @@ namespace WebApi.Controllers
             Class gluteSmashClass = new Class
             {
                 ID = Guid.NewGuid().ToString(),
-                TimeOfClass = "17:00pm - 17:50pm",
+                TimeOfClass = new List<string> { "3:00pm - 4:00pm", "6:00pm - 6:50pm" },
                 Name = "Glute Smasher",
                 SpacesBooked = 0,
                 TotalSpaces = 10,
@@ -39,7 +49,7 @@ namespace WebApi.Controllers
             Class spinningClass = new Class
             {
                 ID = Guid.NewGuid().ToString(),
-                TimeOfClass = "15:00pm - 15:50pm",
+                TimeOfClass = new List<string> { "4:50pm - 5:50pm", "6:00pm - 6:50pm" },
                 Name = "Spinning Class",
                 SpacesBooked = 0,
                 TotalSpaces = 10,
@@ -48,12 +58,13 @@ namespace WebApi.Controllers
             Class assClass = new Class
             {
                 ID = Guid.NewGuid().ToString(),
-                TimeOfClass = "10:00am - 10:50am",
+                TimeOfClass = new List<string> { "10:00am - 10:45am" },
                 Name = "A*s Class",
                 SpacesBooked = 0,
                 TotalSpaces = 10,
             };
 
+            allClasses.Add(defaultClass);
             allClasses.Add(workoutClass);
             allClasses.Add(gluteSmashClass);
             allClasses.Add(spinningClass);
