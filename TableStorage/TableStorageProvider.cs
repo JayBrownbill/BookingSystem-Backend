@@ -23,7 +23,8 @@ namespace WebApi.TableStorage
 
         public Entity GetEntity(string rowKey)
         {
-            throw new NotImplementedException();
+            TableQuery<Entity> query = new TableQuery<Entity>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, rowKey));
+            return table.ExecuteQuery(query).FirstOrDefault();
         }
 
         public IEnumerable<Entity> GetAllEntities(string partitionKey)

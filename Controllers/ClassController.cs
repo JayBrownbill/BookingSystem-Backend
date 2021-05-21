@@ -18,7 +18,6 @@ namespace WebApi.Controllers
     {
         private ITableStorageProvider<ClassEntity> classTableStorage;
         private string partitionKey;
-        private string baseAddress;
         public ClassController(ITableStorageProvider<ClassEntity> classStorageProvider, IConfiguration config)
         {
             classTableStorage = classStorageProvider;
@@ -29,25 +28,17 @@ namespace WebApi.Controllers
         [HttpGet]
         public IEnumerable<ClassEntity> GetClasses()
         {
-
-            var tableStorageResult = classTableStorage.GetAllEntities(partitionKey);
-
-            List<ClassEntity> allClasses = new List<ClassEntity>();
-
-
-            ClassEntity spinningClass = new ClassEntity
-            {
-                ID = Guid.NewGuid().ToString(),
-                TimeOfClass = "4:50pm - 5:50pm, 6:00pm - 6:50pm",
-                //TimeOfClass = new List<string> { "4:50pm - 5:50pm", "6:00pm - 6:50pm" },
-                Name = "Spinning Class",
-                SpacesBooked = 0,
-                TotalSpaces = 10,
-            };
-
-            allClasses.Add(spinningClass);
-
+            IEnumerable<ClassEntity> tableStorageResult = classTableStorage.GetAllEntities(partitionKey);
             return tableStorageResult;
+        }
+
+        [EnableCors]
+        [HttpGet]
+        [Route("/api/classes/{rowKey}")]
+        public ClassEntity GetSingleClass([FromRoute] string rowKey)
+        {
+            ClassEntity resultEntity = classTableStorage.GetEntity(rowKey);
+            return resultEntity;
         }
     }
 }
