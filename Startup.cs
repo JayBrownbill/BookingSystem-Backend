@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Models;
+using WebApi.TableStorage;
 
 namespace WebApi
 {
@@ -26,6 +29,12 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(provider =>
+            {
+                var storageAccount = CloudStorageAccount.Parse(Configuration["azureStorageAccount"]);
+                return storageAccount.CreateCloudTableClient();
+            });
+            services.AddScoped(typeof(ITableStorageProvider<>), typeof(TableStorageProvider<>));
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -36,6 +45,7 @@ namespace WebApi
                                .AllowAnyOrigin();
                     });
             });
+            services.AddHttpClient();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
