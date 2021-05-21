@@ -9,7 +9,8 @@ namespace WebApi.TableStorage
     public interface ITableStorageProvider<Entity>
     {
         //Task<HttpContent> ConnectTableStorageAsync(string url, string tableName);
-        IEnumerable<Entity> GetAllEntities(string partitionKey);
+        IEnumerable<Entity> GetAllEntities();
+        IEnumerable<Entity> GetAllEntitiesOfType(string partitionKey);
         Task<Entity> CreateOrUpdateRecord(Entity entity);
         Entity GetEntity(string rowKey);
 

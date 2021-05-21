@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IEnumerable<ClassEntity> GetClasses()
         {
-            IEnumerable<ClassEntity> tableStorageResult = classTableStorage.GetAllEntities(partitionKey);
+            IEnumerable<ClassEntity> tableStorageResult = classTableStorage.GetAllEntities();
             return tableStorageResult;
         }
 

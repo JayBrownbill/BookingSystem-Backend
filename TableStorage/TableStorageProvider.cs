@@ -27,7 +27,13 @@ namespace WebApi.TableStorage
             return table.ExecuteQuery(query).FirstOrDefault();
         }
 
-        public IEnumerable<Entity> GetAllEntities(string partitionKey)
+        public IEnumerable<Entity> GetAllEntities()
+        {
+            TableQuery<Entity> query = new TableQuery<Entity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.NotEqual, ""));
+            return table.ExecuteQuery<Entity>(query);
+        }
+
+        public IEnumerable<Entity> GetAllEntitiesOfType(string partitionKey)
         {
             TableQuery<Entity> query = new TableQuery<Entity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey));
             return table.ExecuteQuery<Entity>(query);
