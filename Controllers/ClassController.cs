@@ -12,27 +12,32 @@ using WebApi.TableStorage;
 
 namespace WebApi.Controllers
 {
+    [EnableCors]
     [ApiController]
     [Route("/api/classes")]
     public class ClassController : ControllerBase
     {
         private ITableStorageProvider<ClassEntity> classTableStorage;
-        private string partitionKey;
         public ClassController(ITableStorageProvider<ClassEntity> classStorageProvider, IConfiguration config)
         {
             classTableStorage = classStorageProvider;
-            partitionKey = config["partitionKeyClasses"];
         }
 
-        [EnableCors]
         [HttpGet]
-        public IEnumerable<ClassEntity> GetClasses()
+        public IEnumerable<ClassEntity> GetAllClasses()
         {
             IEnumerable<ClassEntity> tableStorageResult = classTableStorage.GetAllEntities();
             return tableStorageResult;
         }
 
-        [EnableCors]
+        [HttpGet]
+        [Route("/api/classes/type/{partitionKey}")]
+        public IEnumerable<ClassEntity> GetAllClassesOfType([FromRoute] string partitionKey)
+        {
+            IEnumerable<ClassEntity> tableStorageResult = classTableStorage.GetAllEntitiesOfType(partitionKey);
+            return tableStorageResult;
+        }
+
         [HttpGet]
         [Route("/api/classes/{rowKey}")]
         public ClassEntity GetSingleClass([FromRoute] string rowKey)
